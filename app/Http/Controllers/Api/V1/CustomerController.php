@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Http\Resources\V1\CustomerResource;
 use App\Http\Resources\V1\CustomerCollection;
 
+
 class CustomerController extends Controller
 {
     /**
@@ -16,7 +17,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return new CustomerCollection(Customer::all());
+        $customers = Customer::paginate(10); // 10 is the number of items per page
+
+        return new CustomerCollection($customers);
     }
 
     /**
@@ -32,7 +35,10 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        $request->validated();
+        $customer = Customer::create($request->all());
+
+        return new CustomerResource($customer);
     }
 
     /**
@@ -56,7 +62,10 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        //
+        $request->validated();
+        $customer->update($request->all());
+
+        return new CustomerResource($customer);
     }
 
     /**
@@ -64,6 +73,8 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+
+        return response()->json();
     }
 }

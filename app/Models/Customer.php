@@ -13,4 +13,13 @@ class Customer extends Model
     {
         return  $this->hasMany(Invoice::class);
     }
+
+    protected $fillable = [
+        'name',
+        'type',
+        'email',
+        'address',
+        'city',
+        'postal_code',
+    ];
 }
